@@ -4148,21 +4148,9 @@ prx.types.placeholder = {
         if(typeof(item.textColor) == 'undefined') {
             item.textColor = prx.componentsHelper.getProp(item.borderColor,'other');
         }
-        if(typeof(item.textFont) == 'undefined') {
-            item.textFont = "Helvetica,sans-serif";
-        }
-        if(typeof(item.textFontStyle) == 'undefined') {
-            item.textFontStyle = 400;
-        }
-        if(typeof(item.textProperties) == 'undefined') {
-            item.textProperties = [];
-        }
 
         //needs the width patenta to correctly calculate width on afterdisplay
         var cR = '';
-
-        var _props = (typeof(prx.richtext)=='undefined') ? prx.componentsHelper.getProp(item.textProperties,'props-text') : '';
-
 
         cR += '<div id="' + _id + '" ' + prx.items.getComponentBaseAttributes(item, containerid, symbol)  + ' class="' + prx.items.getComponentBaseClasses(item, containerid, symbol) + ' pos box type-placeholder" style="width: '+_realw+'px;">';
         cR += '<style>';
@@ -4173,8 +4161,7 @@ prx.types.placeholder = {
         cR += '<div class="diagonal diagonal1 liveUpdate-borderColor-border-color changeProperty-borderColor" style="border-color: '+prx.componentsHelper.getProp(item.borderColor,'color-border')+'; width: '+_width+'px; -moz-transform: rotate('+_angle1+'deg); -webkit-transform: rotate('+_angle1+'deg); -o-transform: rotate('+_angle1+'deg); transform: rotate('+_angle1+'deg);  border-top-width: '+prx.componentsHelper.getProp(item.thickness,'num-border-width')+'px; left: '+prx.componentsHelper.getProp(item.thickness,'num-other')/2+'px;"></div>';
         cR += '<div class="diagonal diagonal2 liveUpdate-borderColor-border-color changeProperty-borderColor" style="border-color: '+prx.componentsHelper.getProp(item.borderColor,'color-border')+'; width: '+_width+'px; -moz-transform: rotate(-'+_angle1+'deg); -webkit-transform: rotate(-'+_angle1+'deg); -o-transform: rotate(-'+_angle1+'deg); transform: rotate(-'+_angle1+'deg); border-top-width: '+prx.componentsHelper.getProp(item.thickness,'num-border-width')+'px; right: '+prx.componentsHelper.getProp(item.thickness,'num-other')/2+'px;"></div>';
         //if(item.text != "") {
-        cR += '<div class="contents" style="position:relative;">';
-        cR += '<span class="shapes-text-container liveUpdate-backgroundColor-background-color changeProperty-backgroundColor liveUpdate-textColor-color" style="' + _props + ' ' + prx.componentsHelper.getProp(item.textFont + '|' + item.textFontStyle,'font-family') + prx.componentsHelper.getProp(item.textFontStyle,'font-style') + '; font-size: '+prx.componentsHelper.getProp(item.textSize,'num-text-size')+'px; '+prx.gradients.getBgCssByProperty(item.backgroundColor,'color-background')+'; color: '+prx.componentsHelper.getProp(item.textColor,'color-text')+';"><span data-editableproperty="text">' + prx.componentsHelper.getProp(item.text,'text-textarea') + '</span></span></div>';
+        cR += '<div class="contents" style="position:relative;"><span class="liveUpdate-backgroundColor-background-color changeProperty-backgroundColor liveUpdate-textColor-color" style="text-align: '+prx.componentsHelper.getProp(item.textAlign,'align')+'; font-size: '+prx.componentsHelper.getProp(item.textSize,'num-text-size')+'px; '+prx.gradients.getBgCssByProperty(item.backgroundColor,'color-background')+'; color: '+prx.componentsHelper.getProp(item.textColor,'color-text')+';"><span data-editableproperty="text">' + prx.componentsHelper.getProp(item.text,'text-textarea') + '</span></span></div>';
         //}
         cR += prx.items.getComponentAppendDivs(item, containerid, symbol);
         cR += '</div>';
@@ -4238,7 +4225,7 @@ prx.types.placeholder = {
 	    	,changeProperty: {
                 caption: 'Text',
                 property: 'text',
-                selector: '.shapes-text-container span',
+                selector: '.liveUpdate-textColor-color',
                 transitionable: false
 			 }
 	    }
@@ -4266,75 +4253,41 @@ prx.types.placeholder = {
                         }
                     }
                     ,prx.commonproperties.borderColor
-                ]
-            ]
-        },
-        {
-            caption: 'Text',
-            properties: [
-                [
-                    {
-                        caption: { label: 'Font family', class: 'text-properties-label text-fontfamily-label' },
-                        name: 'textFont',
-                        proptype: 'font-family',
-                        type: 'select',
-                        relatedEditableProperties: 'text',
-                        relatedCSSProperties: 'font-family',
-                        value: function(item,name) {
-                            if(typeof(item.textFont) == 'undefined') { item.textFont = "Helvetica,sans-serif"; }
-                            return item.textFont;
-                        },
-                        values: function(){ return prx.comps.fonts; }
-                        ,changeProperty: {
-                            caption: ' Text font',
-                            selector: '.shapes-text-container',
-                            property: 'font-family',
-                            transitionable: false
-                        }
-
-                    }
                 ],
                 [
-                    prx.commonproperties.textFontStyleRichText(['font-weight', 'font-style'],'text', false, {propName: 'textFontStyle', caption: 'Font style', useAsDynProp: false}),
                     {
-                        caption: false,
+                        caption: 'Text',
                         name: 'textSize',
                         proptype: 'font-size',
                         type: 'combo-select',
                         relatedEditableProperties: 'text',
                         relatedCSSProperties: 'font-size',
-                        value: function(item,name) {
-                            if(typeof(item.textSize) == 'undefined') { item.textSize = 16; }
-                            return item.textSize;
-                        },
+                        value: function(item,name) { return item.textSize; },
                         values: prx.comps.textsize
                         ,changeProperty: {
-                            caption: ' Text size',
-                            selector: '.shapes-text-container',
+                            caption: 'Text Size',
+                            selector: '.liveUpdate-textColor-color',
                             property: 'font-size',
                             transitionable: true
                         }
                     }
-                ]
-                ,
-                [
-                    prx.commonproperties.textPropertiesRichText(['font-weight','font-style','text-decoration'],'text', false, {propName: 'textProperties', caption: 'Underline', useAsDynProp: false}),
-                    {
-                        caption: { label: 'Color', class: 'text-properties-label text-color-label' },
+                    ,{
+                        caption: false,
                         name: 'textColor',
                         proptype: 'font-color',
-                        type: 'solid-colorpicker',
+                        type: 'colorpicker',
                         relatedEditableProperties: 'text',
                         relatedCSSProperties: 'color',
-                        pffSettings: prx.commonproperties.pffSettingsColor,
                         value: function(item,name) {
-                            if(typeof(item.textColor) == 'undefined') { item.textColor = '#2E2E2E'; }
+                            if(typeof(item.textColor) == 'undefined') {
+                                return item.borderColor;
+                            }
                             return item.textColor;
                         },
                         liveUpdate: 'color'
                         ,changeProperty: {
-                            caption: ' Text color',
-                            selector: '.shapes-text-container',
+                            caption: 'Text Color',
+                            selector: '.liveUpdate-textColor-color',
                             property: 'color',
                             transitionable: true
                         }
@@ -7810,12 +7763,9 @@ prx.components.placeholder = {
     ,width: 200*prx.componentsHelper.getScale(_library)
     ,height: 100*prx.componentsHelper.getScale(_library)
     ,text: 'Placeholder'
-    ,textFont: "Helvetica,sans-serif"
-    ,textFontStyle:  '400'
     ,textSize: 14*prx.componentsHelper.getScale(_library)
     ,textAlign: 'center'
     ,textColor: '000000'
-    ,textProperties: []
     ,backgroundColor: 'EDEDED'
     ,borderColor: 'D1D1D1'
     ,thickness: 1*prx.componentsHelper.getScale(_library)
