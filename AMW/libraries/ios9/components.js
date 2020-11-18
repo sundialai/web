@@ -697,6 +697,8 @@ prx.types.ios7_statusbar = {
 
         now.getMinutes();
 
+        if(item.title === undefined) item.title = "PROTO.IO";
+
         var cR = '';
         cR += '<div id="' + _id + '" ' + prx.items.getComponentBaseAttributes(item, containerid, symbol)  + ' class="' + prx.items.getComponentBaseClasses(item, containerid, symbol) + ' box pos type-ios7-statusbar" '+((prx.componentsHelper.getProp(item.overlay,'boolean'))? 'data-mpoverlay="1"': '')+'>';
 
@@ -741,6 +743,7 @@ prx.types.ios7_statusbar = {
             ,name: 'title'
             ,type: 'input'
             ,value: function(item,name) {
+                if(item.title === undefined) item.title = "PROTO.IO";
                 return item.title;
             }
             ,changeProperty: {
@@ -975,8 +978,8 @@ prx.types.ios7_segmentedcontrol = {
         $.each(item.buttons, function(i,elm) {
             cR += '<div id="'+_id+'-buttons-'+i+'" class="ios7-segmentedcontrol-button dynamic-property '+ (item.ios13 ? '' : 'liveUpdate-borderColor-border-color changeProperty-borderWidth ') +((i == 0 || i == item.buttons.length-1)? ' changeProperty-borderRadius' : '')+'" data-dynamic-property-index="'+i+'">';
             cR += '<input type="radio" name="'+_id+'-radio-input" id="'+_id+'-radio-'+i+'" '+((prx.componentsHelper.getProp(item.selected,'num-other') == i) ? 'checked' : '')+' data-role="none" '+((prx.componentsHelper.getProp(item.active,'num-other') == i) ? 'class="liveUpdate-activeBackgroundColor-background-color liveUpdate-activeTextColor-color"' : '')+' ' +((!prx.componentsHelper.getProp(item.changeActive,'boolean')) ? 'disabled' : '')+ '>'
-            cR += '<label for="'+_id+'-radio-'+i+'" '+((prx.componentsHelper.getProp(item.selected,'num-other') == i) ? 'class="liveUpdate-activeBackgroundColor-background-color liveUpdate-activeTextColor-color' +  (item.ios13 ? '' : ' liveUpdate-borderColor-border-color') : '')+' >'
-            cR += '<span data-editableproperty="text" data-dynamic-property-index="'+i+'">' + prx.componentsHelper.getProp(elm.text,'text-textarea') + '</span>';
+            cR += '<label for="'+_id+'-radio-'+i+'" '+((prx.componentsHelper.getProp(item.selected,'num-other') == i) ? 'class="liveUpdate-activeBackgroundColor-background-color liveUpdate-activeTextColor-color' +  (item.ios13 ? '' : ' liveUpdate-borderColor-border-color') : '')+' ">'
+            cR += '<span class="editable-text" data-editableproperty="text" data-dynamic-property-index="'+i+'">' + prx.componentsHelper.getProp(elm.text,'text-textarea') + '</span>';
             if(item.ios13) {
                 cR += '<span class="label-separator liveUpdate-borderColor-border-color changeProperty-borderColor"></span>';
             }
@@ -1205,7 +1208,7 @@ prx.types.ios7_segmentedcontrol = {
                 }
                 ,changeProperty: {
                     caption: 'Text',
-                    selector: 'label',
+                    selector: 'label .editable-text',
                     property: 'text',
                     transitionable: false
                 }
